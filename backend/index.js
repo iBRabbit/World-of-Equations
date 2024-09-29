@@ -3,9 +3,9 @@ const db = require('./models');
 const path = require('path');
 const cors = require('cors');
 
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
-const port = process.env.SERVER_PORT || 8000
+const port = process.env.PORT || 8001
 const app = express();
 
 app.use(express.json());
