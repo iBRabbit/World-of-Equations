@@ -41,7 +41,7 @@ function Login() {
           </div>
         </div>
 
-        <div className="text-center lg:text-left mx-32">
+        <div className="hidden text-center lg:flex mx-32">
           <img src="assets/woe.png" alt="" />
         </div>
       </div>

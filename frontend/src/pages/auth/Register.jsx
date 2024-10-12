@@ -48,7 +48,7 @@ function Register() {
           </div>
         </div>
 
-        <div className="text-center lg:text-left mx-32">
+        <div className="text-center hidden lg:flex mx-32">
           <img src="assets/woe.png" alt="" />
         </div>
       </div>
