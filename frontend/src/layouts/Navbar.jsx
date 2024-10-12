@@ -2,12 +2,12 @@ import React from "react";
 
 const AppNavbar = () => {
   return (
-    <div className="navbar px-4 shadow-md" style={{ backgroundColor: "#f9f9f9" }}>
+    <div className="navbar px-4 shadow-md fixed w-full top-0 left-0 z-10" style={{ backgroundColor: "#f9f9f9" }}>
       {/* Navbar Start */}
       <div className="navbar-start flex-grow">
         <div className="navbar-start-left mx-2">
           <a href="/" className="flex items-center">
-            <img src="assets/woe.png" alt="Logo World of Equations" className="w-16 h-16 mr-3" />
+            <img src="assets/woe_logo.png" alt="Logo World of Equations" className="w-16 h-16 mr-3" />
             <span className="text-xl font-semibold" style={{ color: "#f97316" }}>World of Equations</span>
           </a>
         </div>
@@ -15,7 +15,7 @@ const AppNavbar = () => {
         <div className="navbar-start-right dropdown dropdown-hover bg-transparent">
           <ul tabIndex={0} role="button" className="menu menu-horizontal p-0 m-0">
             <li className="p-0" style={{ color: "#1f2937", position: "relative" }}>
-              <a>Categories 
+              <a className="hidden md:flex">Categories 
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -65,6 +65,9 @@ const AppNavbar = () => {
               <a>Courses</a>
             </li>
             <li>
+              <a>Pricing</a>
+            </li>
+            <li>
               <a href="/signup">Sign up</a>
             </li>
             <li>
@@ -81,6 +84,9 @@ const AppNavbar = () => {
             </li>
             <li>
               <a className="px-4" style={{ color: "#1f2937" }}>Courses</a>
+            </li>
+            <li>
+              <a className="px-4" style={{ color: "#1f2937" }}>Pricing</a>
             </li>
           </ul>
           <a href="/login"
