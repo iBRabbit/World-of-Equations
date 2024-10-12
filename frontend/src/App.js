@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import AppNavbar from "./layouts/Navbar";
+import Dashboard from "./pages/Dashboard";
+import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
 
 function App() {
   return (
@@ -13,8 +16,10 @@ function App() {
       <Router>
         <AppNavbar />
         <Routes>
-
-        </Routes>
+          <Route path="/" element = {<Dashboard />} />
+          <Route path="/signup" element = {<Register />} />
+          <Route path="/login" element = {<Login />} />
+         </Routes>
       </Router>
     </div>
   );

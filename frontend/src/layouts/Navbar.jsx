@@ -65,10 +65,10 @@ const AppNavbar = () => {
               <a>Courses</a>
             </li>
             <li>
-              <a>Register</a>
+              <a href="/signup">Sign up</a>
             </li>
             <li>
-              <a>Login</a>
+              <a href="/login">Log in</a>
             </li>
           </ul>
         </div>
@@ -83,21 +83,21 @@ const AppNavbar = () => {
               <a className="px-4" style={{ color: "#1f2937" }}>Courses</a>
             </li>
           </ul>
-          <a
-            className="btn btn-outline ml-3 px-4 py-2 text-sm rounded-full transition-all"
-            style={{ borderColor: "#f97316", color: "#f97316" }}
-            onMouseEnter={(e) => (e.target.style.backgroundColor = "#fb923c", e.target.style.color = "#fff")}
-            onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent", e.target.style.color = "#f97316")}
-          >
-            Register
-          </a>
-          <a
+          <a href="/login"
             className="btn ml-3 px-4 py-2 text-sm rounded-full text-white transition-all"
             style={{ backgroundColor: "#f97316" }}
             onMouseEnter={(e) => (e.target.style.backgroundColor = "#ea580c")}
             onMouseLeave={(e) => (e.target.style.backgroundColor = "#f97316")}
           >
-            Login
+            Log in
+          </a>
+          <a href = '/signup'
+            className="btn btn-outline ml-3 px-4 py-2 text-sm rounded-full transition-all"
+            style={{ borderColor: "#f97316", color: "#f97316" }}
+            onMouseEnter={(e) => (e.target.style.backgroundColor = "#fb923c", e.target.style.color = "#fff")}
+            onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent", e.target.style.color = "#f97316")}
+          >
+            Sign up
           </a>
         </div>
       </div>
