@@ -59,7 +59,7 @@ const AppNavbar = () => {
           </label>
           <ul tabIndex="0" className="menu-compact dropdown-content menu mt-3 w-52 rounded-box bg-base-100 p-2 shadow">
             <li>
-              <a>Home</a>
+              <a href="/">Home</a>
             </li>
             <li>
               <a>Courses</a>
@@ -80,7 +80,7 @@ const AppNavbar = () => {
         <div className="hidden lg:flex items-center">
           <ul className="menu menu-horizontal px-1">
             <li>
-              <a className="px-4" style={{ color: "#1f2937" }}>Home</a>
+              <a href = "/" className="px-4" style={{ color: "#1f2937" }}>Home</a>
             </li>
             <li>
               <a className="px-4" style={{ color: "#1f2937" }}>Courses</a>
