@@ -7,11 +7,13 @@ import Dashboard from "./pages/Dashboard";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 
+import { AuthProvider } from "./helpers/AuthContext";
 import Footer from "./layouts/Footer";
 
 function App() {
   return (
     <div className="App">
+    <AuthProvider>
       <Helmet>
         <title>Home</title>
       </Helmet>
@@ -22,9 +24,8 @@ function App() {
           <Route path="/signup" element = {<Register />} />
           <Route path="/login" element = {<Login />} />
          </Routes>
-
-      <Footer />
       </Router>
+    </AuthProvider>
     </div>
   );
 }
