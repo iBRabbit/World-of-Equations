@@ -15,6 +15,9 @@ app.use(cors());
 const APITestRouter = require('./routes/APITest');
 app.use('/apiTest/', APITestRouter);
 
+const UserRouter = require('./routes/Users');
+app.use('/auth/', UserRouter);
+
 db.sequelize.sync().then(() => {
     app.listen(port, () => {
         console.clear();
