@@ -1,4 +1,4 @@
-import {React, useEffect} from "react";
+import { React, useEffect } from "react";
 
 import { useAuth } from "../helpers/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -9,13 +9,13 @@ const AppNavbar = () => {
   const { data, loading, error } = useFetchData(`/auth/profile/`, localStorage.getItem("token"));
   const { isAuthenticated, setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
-  
+
   const handleLogout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem("token"); 
-    navigate('/login');
-  }
-  
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <div className="navbar px-4 shadow-md fixed w-full top-0 left-0 z-10" style={{ backgroundColor: "#f9f9f9" }}>
       {/* Navbar Start */}
@@ -91,18 +91,17 @@ const AppNavbar = () => {
 
         {/* Navbar for Larger Screens */}
         <div className="hidden lg:flex items-center">
-
-        {isAuthenticated && (
+          {isAuthenticated && (
             <>
               <div className="dropdown dropdown-end">
                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                   <div className="w-10 rounded-full">
-                    <img alt="Tailwind CSS Navbar component" src={data.user.profile_picture ? data.user.profile_picture : "assets/woe_logo.png"} />
+                    <img alt="User Profile" src={data && data.user ? data.user.profile_picture : "assets/woe_logo.png"} />
                   </div>
                 </div>
                 <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                   <li>
-                    <a href = '/profile' lassName="justify-between">
+                    <a href="/profile" lassName="justify-between">
                       Profile
                       <span className="badge">New</span>
                     </a>
@@ -111,7 +110,9 @@ const AppNavbar = () => {
                     <a>Settings</a>
                   </li>
                   <li>
-                    <a href="" onClick={handleLogout}>Logout</a>
+                    <a href="" onClick={handleLogout}>
+                      Logout
+                    </a>
                   </li>
                 </ul>
               </div>
