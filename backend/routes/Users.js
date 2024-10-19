@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const { Users } = require('../models');
 const { validateToken } = require('../middlewares/AuthMiddleware');
 
+const {upload, handleUpload} = require('../utils/cloudinary');
+
 router.get('/', async (req, res) => {
     data = await Users.findAll();
     res.status(200).json(data);
@@ -157,6 +159,42 @@ router.put('/profile', validateToken, async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 
+});
+
+router.post('/upload-profile-picture', validateToken, upload.single("file"), async (req, res) => {
+    const token = req.headers["token"];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userID = decoded.id;
+
+    try {
+      if (!req.file) 
+        return res.status(400).send({ message: "No file uploaded." });
+
+        const b64 = Buffer.from(req.file.buffer).toString("base64");
+        let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+
+        const cldRes = await handleUpload(dataURI, "users");
+        await Users.update(
+            {
+                profile_picture: cldRes.secure_url, // Store only the URL
+            },
+            {
+                where: {
+                    id: userID
+                }
+            }
+        );
+        res.json({
+            message: "Profile picture updated successfully",
+            profile_picture: cldRes.secure_url,
+        });
+        
+    } catch (error) {
+      console.log(error);
+      res.send({
+        message: error.message,
+      });
+    }   
 });
 
 module.exports = router;

@@ -6,23 +6,25 @@ import Loading from "../../components/loaders/Loading";
 
 function Profile() {
   const { data, loading, error } = useFetchData(`/auth/profile/`, localStorage.getItem("token"));
-
   const [profileData, setProfileData] = useState({
     name: "",
     phone_number: "",
-    email: ""
+    email: "",
+    profile_picture: "" // Tambahkan state untuk foto profil
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
+  const [file, setFile] = useState(null); // State untuk file gambar
 
   useEffect(() => {
     if (data) {
       setProfileData({
         name: data.user.name || "",
         phone_number: data.user.phone_number || "",
-        email: data.user.email || ""
+        email: data.user.email || "",
+        profile_picture: data.user.profile_picture || "assets/woe_logo.png" // Default ke logo jika belum ada gambar profil
       });
     }
   }, [data]);
@@ -32,6 +34,38 @@ function Profile() {
       ...profileData,
       [e.target.name]: e.target.value
     });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setFile(file);
+    setIsSubmitting(true);
+    handleUploadProfilePicture();
+  };
+
+  const handleUploadProfilePicture = async () => {
+    const formData = new FormData();
+    formData.append('file', file);
+    console.log(formData);
+    try {
+      const response = await axiosInstance.post('/auth/upload-profile-picture', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          token: `${localStorage.getItem("token")}`
+        }
+      });
+      setProfileData({
+        ...profileData,
+        profile_picture: response.data.profile_picture 
+      });
+      setMessage('Profile picture updated successfully');
+      setSuccess(true);
+    } catch (e) {
+      setMessage(`Error uploading profile picture : ${e.message}`);
+      setSuccess(false);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleEditMainProfile = async (e) => {
@@ -59,8 +93,12 @@ function Profile() {
 
   return (
     <div className="grid grid-cols-12 gap-4 mt-28 mx-20">
-      <div className="col-span-4 bg-gray-300 p-4">
-        <img src="assets/woe_logo.png" alt="Logo" />
+      <div className="col-span-4 bg-gray-300 p-4 ">
+        <img src={profileData.profile_picture} alt="Profile" className="rounded-full w-64 h-64 object-cover m-auto" />
+        <label htmlFor="file" className="btn btn-primary mt-5 text-white">Upload</label>
+        <input id="file" type="file"
+                  className="hidden file-input file-input-bordered file-input-primary w-full max-w-xs mt-10" onChange={handleFileChange}/>
+
       </div>
       <div className="col-span-8 bg-gray-200 p-4">
         <div role="tablist" className="tabs tabs-lifted">
@@ -74,10 +112,6 @@ function Profile() {
                 {message && <Alert type={success ? "success" : "error"} message={message} className="mb-5" />}
                 <form onSubmit={handleEditMainProfile}>
                   <label className="input input-bordered flex items-center gap-2 mb-5">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 opacity-70">
-                      <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
-                      <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
-                    </svg>
                     <input type="text" className="grow" placeholder="Email" value={profileData.email} disabled />
                   </label>
 
