@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const { Users } = require('../models');
+const { validateToken } = require('../middlewares/AuthMiddleware');
 
 router.get('/', async (req, res) => {
     data = await Users.findAll();
@@ -36,7 +37,8 @@ router.post('/', async (req, res) => {
 
     await Users.create({
         password: hashPassword,
-        email:email
+        email:email,
+        is_admin : false,
     });
 
     res.status(200).json({
@@ -44,7 +46,6 @@ router.post('/', async (req, res) => {
     });
 });
 
-module.exports = router;
 
 router.post('/login', async (req, res) => {
     const {email, password} = req.body;
@@ -114,3 +115,48 @@ router.get('/check', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+router.post('/profile', validateToken, async (req, res) => {
+    const token = req.headers["token"];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userID = decoded.id;
+    try {
+        const user = await Users.findByPk(userID);
+        console.log(`User ${user}`);
+        res.status(200).json({
+            user: user,
+        })
+
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+router.put('/profile', validateToken, async (req, res) => {
+    const token = req.headers["token"];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userID = decoded.id;
+
+    const data = req.body;
+    console.log(`User ID: ${userID}`);
+    console.log(`Data ${JSON.stringify(data)}`);
+
+    // save
+    try {
+        await Users.update({
+            name: data.name,
+            email: data.email,
+            phone_number: data.phoneNumber,
+        }, { where: { id: userID } });
+        res.status(200).json({
+            message: "Profile updated successfully",
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: "Server error" });
+    }
+
+});
+
+module.exports = router;
