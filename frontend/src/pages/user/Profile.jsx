@@ -37,15 +37,15 @@ function Profile() {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFile(file);
     setIsSubmitting(true);
-    handleUploadProfilePicture();
+    const selectedFile = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    handleUploadProfilePicture(formData);
   };
 
-  const handleUploadProfilePicture = async () => {
-    const formData = new FormData();
-    formData.append('file', file);
+  const handleUploadProfilePicture = async (formData) => {
+    
     console.log(formData);
     try {
       const response = await axiosInstance.post('/auth/upload-profile-picture', formData, {
