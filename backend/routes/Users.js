@@ -7,6 +7,7 @@ const { Users } = require('../models');
 const { validateToken } = require('../middlewares/AuthMiddleware');
 
 const {upload, handleUpload} = require('../utils/cloudinary');
+const { getUserIdFromToken } = require('../utils/jwtUtils');
 
 router.get('/', async (req, res) => {
     data = await Users.findAll();
@@ -95,13 +96,11 @@ router.post('/login', async (req, res) => {
 router.get('/check', async (req, res) => {
     try {
         const token = req.header('token');
-        console.log("Check  " + token)
         if (!token) {
             return res.status(401).json({ message: 'No token, authorization denied' });
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await Users.findByPk(decoded.id);
+        const user = getUserIdFromToken(req.headers["token"]);
 
         if (!user) {
             return res.status(401).json({ message: 'User not found' });
@@ -119,12 +118,9 @@ router.get('/check', async (req, res) => {
 });
 
 router.post('/profile', validateToken, async (req, res) => {
-    const token = req.headers["token"];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userID = decoded.id;
+    const userID = getUserIdFromToken(req.headers["token"]);
     try {
         const user = await Users.findByPk(userID);
-        console.log(`User ${user}`);
         res.status(200).json({
             user: user,
         })
@@ -136,9 +132,7 @@ router.post('/profile', validateToken, async (req, res) => {
 });
 
 router.put('/profile', validateToken, async (req, res) => {
-    const token = req.headers["token"];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userID = decoded.id;
+    const userID = getUserIdFromToken(req.headers["token"]);
 
     const data = req.body;
     console.log(`User ID: ${userID}`);
@@ -162,9 +156,7 @@ router.put('/profile', validateToken, async (req, res) => {
 });
 
 router.post('/upload-profile-picture', validateToken, upload.single("file"), async (req, res) => {
-    const token = req.headers["token"];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userID = decoded.id;
+    const userID = getUserIdFromToken(req.headers["token"]);
 
     try {
       if (!req.file) 
