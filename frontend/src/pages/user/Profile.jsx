@@ -2,11 +2,15 @@ import {React, useEffect, useState} from "react";
 
 import axiosInstance from "../../api/axiosConfig";
 
+import Alert from "../../components/alerts/Alert";
+
 function Profile() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [loading, setLoading] = useState("");
+    const [message, setMessage] = useState("");
+    const [success, setSuccess] = useState("");
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -45,9 +49,10 @@ function Profile() {
             });
 
             
-            if(response.status === 200)
-                alert('Success')
-
+            if(response.status === 200) {
+              setSuccess(true);
+              setMessage('Profile updated successfully');
+            }
         } catch (e) {
             console.error("Error editing profile", e);
             alert('Error editing profile', e);
@@ -63,8 +68,9 @@ function Profile() {
         <div role="tablist" className="tabs tabs-lifted">
           <input type="radio" name="my_tabs_2" role="tab" className="tab" aria-label="Main Profile" defaultChecked />
           <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
+            {message && <Alert type="success" message={message} className="mb-5"/>}
             <form action="/profile" method="put" onSubmit={handleEditMainProfile}>
-            
+              
               <label className="input input-bordered flex items-center gap-2 mb-5">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 opacity-70">
                   <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />

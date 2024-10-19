@@ -3,6 +3,8 @@ import Heading from "../../components/headings/Heading";
 
 import axiosInstance from "../../api/axiosConfig";
 
+import Alert from "../../components/alerts/Alert";
+
 function Register() {
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
@@ -17,19 +19,18 @@ function Register() {
 
     try {
       const res = await axiosInstance.post("/auth", data);
-      setMessage(res.data.message)
-      setSuccess(true)
+      setMessage(res.data.message);
+      setSuccess(true);
 
-      if(res.status === 200) {
+      if (res.status === 200) {
         e.target.reset();
         setTimeout(() => {
-          window.location.href = '/login';
+          window.location.href = "/login";
         }, 1000);
       }
-
     } catch (e) {
-      setMessage(e.response.data.message)
-      setSuccess(false)
+      setMessage(e.response.data.message);
+      setSuccess(false);
     }
   };
 
@@ -37,19 +38,12 @@ function Register() {
     <div className="hero min-h-screen">
       <div className="hero-content flex-col lg:flex-row-reverse m-20">
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-
           <Heading level={"h1"} className={"mt-6"}>
             Sign Up
           </Heading>
 
-          {message && (
-            <div className="alert-section mt-10 mx-10" >
-            <div role="alert" className={`alert alert-${(success) ? "success" : "error"} `}>
-            <span>{message}</span>
-            </div>
-            </div>
-          )}
-
+          {message && <Alert type={success ? "success" : "error"} className="mt-5 mx-auto w-3/4" message={message} />}
+          
           <form className="card-body pb-0" onSubmit={handleSubmit}>
             <div className="form-control">
               <label className="label">
